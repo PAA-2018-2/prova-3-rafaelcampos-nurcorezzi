@@ -7,6 +7,7 @@
 \usepackage[all]{xy}
 \usepackage{color}
 \usepackage{graphicx}
+\usepackage[]{algorithm2e}
 
 \newcommand{\resposta}[1]{ \noindent {\bf Solução}.{\color{blue} #1}}
 
@@ -91,7 +92,21 @@ E todas as reduções (de 3-SAT para $Q'$, de $Q'$ para $Q$ e de $Q$ para HAM-CY
     
     Nós representamos cada variável Xi em uma fórmula lógica como uma estrutura em diamante, como representado na figura 1, e adicionamos um vértice para cada cláusula conjuntiva.
     
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\textwidth]{Estrutura de diamantes.png}
+\caption{Estrutura de diamantes}
+\label{fig:}
+\end{figure}
+    
     Cada diamante contem um fileira de 2k vértices, sendo k o número de cláusulas, mais k-1 vértices entre cada par de vértices. Com os dois vértices pertencentes ao diamante, temos um total de 3k+1 vértices, como está representado na figura 2.
+    
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.9\textwidth]{Fileiras no diamante.png}
+\caption{Fileiras no diamante}
+\label{fig:}
+\end{figure}
     
     Para cada variável Xi que aparece em uma cláusula j, conectamos o par de vértices relativos a j dentro do diamante de Xi ao vértice Cj de j, essa conexão é feita por meio de duas arestas novas inseridas no grafo, uma saíndo do vértice a esquerda do par para o vértice Cj e outra saindo de Cj para o vértice a direita do par.
     
@@ -106,22 +121,6 @@ E todas as reduções (de 3-SAT para $Q'$, de $Q'$ para $Q$ e de $Q$ para HAM-CY
     Dessa forma, para que um vértice Cj que represente uma cláusula j seja visitado, algum dos literais dentro dela tem que possuir um valor verdadeiro. Ou seja, caso o circulo hamiltoniano exista, todos os Cj foram visitados e isso resulta que todos eles possuem pelo menos um literal que possa verdadeiro, caso não exista, alguma das cláusulas não possui um literal verdadeiro sem que falseie outra cláusula.
     
 }
-    
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.9\textwidth]{Estrutura de diamantes.png}
-\caption{Estrutura de diamantes}
-\label{fig:}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.9\textwidth]{Fileiras no diamante.png}
-\caption{Fileiras no diamante}
-\label{fig:}
-\end{figure}
-    
-
   
 \item {\bf (2.5 pontos)} Considere o seguinte jogo em um grafo
   (não-dirigido) $G$, que inicialmente contém 0 ou mais bolas de gude
@@ -137,8 +136,51 @@ E todas as reduções (de 3-SAT para $Q'$, de $Q'$ para $Q$ e de $Q$ para HAM-CY
   ser incluídas na solução.
 
   \resposta{
-    Escreva aqui sua solução.
-  }
+    Para provar que esse problema é NP-completo, primeiro precisamos mostrar que ele é NP, para isso temos que provar que dada uma suposta resposta para um problema, é possível verificar se ela é realmente valida ou não em tempo polinomial.
+    
+    Para isso supomos que existe uma sequência de movimentos sobre pares de vértices $R$ = (($V1$,$V2$),($V3$,$V4$), ... , ($Vn-1$,$Vn$)), sendo que cada movimento seria remover duas bolas do vértice a direita e adicionar uma bola ao vértice a esquerda. 
+    
+    Para conferir se $R$ é uma solução para um grafo $G$ = ($V$, $E$) qualquer e dada a função $p(v)$ que retorna o número de bolas de gude no vértice $v$, usamos o algoritmo 1 abaixo
+    
+\begin{algorithm}[H]
+\KwData{sequência $R$, grafo $G$ e função $p$}
+\KwResult{Se $R$ resolve o problema em questão}
+
+\For{cada par $($u$,$v$) \in R$}{
+
+\eIf{$($u$,$v$) \in E$ and $p(u)$ \geq 2}{
+$p(u) \leftarrow p(u)-2$
+
+$p(v) \leftarrow p(v)+1$
+}{
+return FALSE
+}
+}
+
+$S \leftarrow FALSE$ 
+
+\For{cada vértice $v$ \in $E$}{
+
+\eIf{$p(u)$ $=$ 1}{
+\eIf{$S$ $=$ TRUE}{
+return FALSE
+}{
+$S \leftarrow TRUE$ 
+}
+}{
+\eIf{$p(u)$ \neq 0}{
+return FALSE
+}
+}
+}
+return S
+\BlankLine
+
+\caption{verificar uma solução para o problema das bolas}
+\end{algorithm}
+}
+
+Como o algoritmo 1 executa em tempo polinomial, então é possível verificar o problema das bolas em tempo polinomial.
   
 \item {\bf (2.5 pontos)} Uma fórmula booleana em {\it forma normal conjuntiva com disjunção exclusiva (FNCX)} é uma conjunção de diversas cláusulas, e cada cláusula é uma disjunção exclusiva (XOR) de diversos literais. Lembre-se que a disjunção exclusiva é dada por:
 
