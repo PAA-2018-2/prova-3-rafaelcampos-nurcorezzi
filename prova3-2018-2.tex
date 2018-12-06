@@ -138,49 +138,55 @@ E todas as reduções (de 3-SAT para $Q'$, de $Q'$ para $Q$ e de $Q$ para HAM-CY
   \resposta{
     Para provar que esse problema é NP-completo, primeiro precisamos mostrar que ele é NP, para isso temos que provar que dada uma suposta resposta para um problema, é possível verificar se ela é realmente valida ou não em tempo polinomial.
     
-    Para isso supomos que existe uma sequência de movimentos sobre pares de vértices $R$ = (($V1$,$V2$),($V3$,$V4$), ... , ($Vn-1$,$Vn$)), sendo que cada movimento seria remover duas bolas do vértice a direita e adicionar uma bola ao vértice a esquerda. 
+    \begin{enumerate}
+        \item Para isso supomos que existe uma sequência de movimentos sobre pares de vértices $R$ = (($V1$,$V2$),($V3$,$V4$), ... , ($Vn-1$,$Vn$)), sendo que cada movimento seria remover duas bolas do vértice a direita e adicionar uma bola ao vértice a esquerda. 
     
     Para conferir se $R$ é uma solução para um grafo $G$ = ($V$, $E$) qualquer e dada a função $p(v)$ que retorna o número de bolas de gude no vértice $v$, usamos o algoritmo 1 abaixo
     
-\begin{algorithm}[H]
-\KwData{sequência $R$, grafo $G$ e função $p$}
-\KwResult{Se $R$ resolve o problema em questão}
+    \begin{algorithm}[H]
+    \KwData{sequência $R$, grafo $G$ e função $p$}
+    \KwResult{Se $R$ resolve o problema em questão}
+    
+    \For{cada par $($u$,$v$) \in R$}{
+    
+    \eIf{$($u$,$v$) \in E$ and $p(u)$ \geq 2}{
+    $p(u) \leftarrow p(u)-2$
+    
+    $p(v) \leftarrow p(v)+1$
+    }{
+    return FALSE
+    }
+    }
+    
+    $S \leftarrow FALSE$ 
+    
+    \For{cada vértice $v$ \in $E$}{
+    
+    \eIf{$p(u)$ $=$ 1}{
+    \eIf{$S$ $=$ TRUE}{
+    return FALSE
+    }{
+    $S \leftarrow TRUE$ 
+    }
+    }{
+    \eIf{$p(u)$ \neq 0}{
+    return FALSE
+    }
+    }
+    }
+    return S
+    \BlankLine
+    
+    \caption{verificar uma solução para o problema das bolas}
+    \end{algorithm}
+    
+    Como o algoritmo 1 executa em tempo polinomial, então é possível verificar o problema das bolas em tempo polinomial.
+    
+    \item É possivel realizar uma redução de HAM-CYCLE para o problema em questão(BOLAS). Inicialmente os vértices do grafo serão enumerados de 1 a N, então serão realizadas N iterações onde na i-ésima iteração serão colocadas 2 bolas no vértice i e 1 bola no restante dos vértices o que pode ser feito em tempo polinomial. Suponha que existe um caminho hamiltoniano iniciando do vértice i logo é possível resolver o problema das BOLAS apenas retirando as 2 bolas iniciais e repassando a bola restante pelo caminho, caso todas as iterações possuam tal caminho então teremos um ciclo hamiltoniano. Agora suponha que não existe um caminho hamiltoniano iniciando de algum vértice i, isto significa que um ou mais vértices deverão ser revisitados para que todas as outras bolas dos demais vértices com apenas 1 bola possam ser coletadas, ou seja é necessário que um ou mais vértices possam sofrer mais de uma retirada porém apenas existem N+1 bolas no grafo o que implica em apenas N retiradas logo revisitações não serão possiveis e portanto não existirá uma solução para BOLAS naquela iterção. Sendo assim se ao terminar o loop e alguma das iterações não tiver retornado solução para BOLAS então não existirá um ciclo hamiltoniano neste grafo, caso contrário existirá um ciclo hamiltoniano no grafo.
+    
+    \end{enumerate}
 
-\For{cada par $($u$,$v$) \in R$}{
-
-\eIf{$($u$,$v$) \in E$ and $p(u)$ \geq 2}{
-$p(u) \leftarrow p(u)-2$
-
-$p(v) \leftarrow p(v)+1$
-}{
-return FALSE
 }
-}
-
-$S \leftarrow FALSE$ 
-
-\For{cada vértice $v$ \in $E$}{
-
-\eIf{$p(u)$ $=$ 1}{
-\eIf{$S$ $=$ TRUE}{
-return FALSE
-}{
-$S \leftarrow TRUE$ 
-}
-}{
-\eIf{$p(u)$ \neq 0}{
-return FALSE
-}
-}
-}
-return S
-\BlankLine
-
-\caption{verificar uma solução para o problema das bolas}
-\end{algorithm}
-}
-
-Como o algoritmo 1 executa em tempo polinomial, então é possível verificar o problema das bolas em tempo polinomial.
   
 \item {\bf (2.5 pontos)} Uma fórmula booleana em {\it forma normal conjuntiva com disjunção exclusiva (FNCX)} é uma conjunção de diversas cláusulas, e cada cláusula é uma disjunção exclusiva (XOR) de diversos literais. Lembre-se que a disjunção exclusiva é dada por:
 
