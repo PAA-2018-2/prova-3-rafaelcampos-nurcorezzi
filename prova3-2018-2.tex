@@ -200,7 +200,22 @@ Como o algoritmo 1 executa em tempo polinomial, então é possível verificar o 
   intermediárias, caso existam, devem ser incluídas na solução.
 
   \resposta{
-    Escreva aqui sua solução.
+     O problema FNCX-SAT está em P e pode ser resolvido com eliminação gaussiana utilizando aritmética modular, basta observar que uma clausula de multiplos literais unidos por XOR possui o mesmo valor verdade que a soma dos valores das variaveis MOD 2, portanto podemos montar um sistema linear com todas as clausulas de uma FNCX-SAT.
+    Considere a seguinte fórmula:
+        \[ (a \oplus b \oplus c) \lor
+        (a \oplus \neg b \oplus c) \lor
+        (a \oplus \neg b \oplus \neg c) \]
+    
+    É possivel transforma-la em um sistema linear tal que:
+        \[ a + b + c = 1\]
+        \[ a + \neg b + c = 1\]
+        \[ a + \neg b + \neg c = 1\]
+    Onde cada operação de soma é realizada como uma operação aritmética de módulo 2. Porém como temos negações também é necessário transformar as variaveis a partir das identidades \(\neg x = 1 \oplus x , x \oplus x = 0 \) fazendo com que o seguinte sistema seja obtido:
+        \[ a + b + c = 1\]
+        \[ a + b + c = 0\]
+        \[ a + b + c = 1\]
+    
+    Caso o sistema final obtido possua equações linearmente dependentes como acima entao a eliminação gaussiana não pode ser aplicada o que indica que não há uma designação de valores que permita satisfazer a fórmula FNCX-SAT. A verificação pode ser realizada em tempo polinomial quadrático apenas verificando se alguma linha é multipla de outra. Caso não existam equações linearmente dependentes existe uma designação e a mesma pode ser obtida através da resolução do sistema, que pode ser executada também em tempo polinomial. 
   }
 \end{enumerate}
 
